@@ -53,6 +53,8 @@ export function flattenErrors(
   pathPrefix?: string
 ): Error[] {
   const flattenedErrors: Error[] = [];
+  // This shouldn't happen, but just in case
+  if (!errors) return flattenedErrors;
   // Handle the case where an error is an array of FieldErrors, each errors are
   // handled individually
   if (errors.message && typeof errors.message === "string")

@@ -7,8 +7,7 @@ describe("Forms/Errors", () => {
   describe("flattenErrors", () => {
     describe("when the error object is empty", () => {
       it("should return an empty array if no errors are passed", () => {
-        const errors = {};
-        expect(flattenErrors(errors)).toEqual([]);
+        expect(flattenErrors({})).toEqual([]);
       });
     });
     describe("when the error object contains a deeply nested array", () => {
