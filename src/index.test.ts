@@ -1,0 +1,77 @@
+import type { FieldError } from "react-hook-form";
+import { describe, it, expect } from "vitest";
+
+import { flattenErrors } from "./index";
+
+describe("Forms/Errors", () => {
+  describe("flattenErrors", () => {
+    describe("when the error object is empty", () => {
+      it("should return an empty array if no errors are passed", () => {
+        const errors = {};
+        expect(flattenErrors(errors)).toEqual([]);
+      });
+    });
+    describe("when the error object contains a deeply nested array", () => {
+      it("should return all the errors", () => {
+        const errors = {
+          name: {
+            message: "String must contain at least 1 character(s)",
+            type: "too_small",
+          },
+          "address.label": {
+            message: "Address label is required",
+            type: "required",
+          },
+          images: [
+            {
+              type: "required",
+              message: "Image is required",
+              // This is taken from an actual error object
+              // Looks like there's an issue with RHF typings
+              // Type casting so typescript doesn't complain
+            },
+          ] as unknown as FieldError,
+          offices: [
+            {
+              address: {
+                formattedAddress: {
+                  message: "This is an address error",
+                  type: "required",
+                },
+              },
+            },
+          ] as unknown as FieldError,
+          message: { message: "A message error", type: "too_small" },
+          type: { message: "A type error", type: "too_small" },
+        } satisfies Parameters<typeof flattenErrors>[0];
+
+        const flattenedErrors = flattenErrors(errors);
+
+        expect(flattenedErrors[0]).toMatchObject({
+          fieldName: "name",
+          message: "String must contain at least 1 character(s)",
+        });
+        expect(flattenedErrors[1]).toMatchObject({
+          fieldName: "address.label",
+          message: "Address label is required",
+        });
+        expect(flattenedErrors[2]).toMatchObject({
+          fieldName: "images.0",
+          message: "Image is required",
+        });
+        expect(flattenedErrors[3]).toMatchObject({
+          fieldName: "offices.0.address.formattedAddress",
+          message: "This is an address error",
+        });
+        expect(flattenedErrors[4]).toMatchObject({
+          fieldName: "message",
+          message: "A message error",
+        });
+        expect(flattenedErrors[5]).toMatchObject({
+          fieldName: "type",
+          message: "A type error",
+        });
+      });
+    });
+  });
+});
