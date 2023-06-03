@@ -1,12 +1,12 @@
 import type { FieldErrors } from "react-hook-form";
 
 type Error = {
-  fieldName: string;
+  path: string;
   message: string;
 };
 
 /**
- * Reshape the react-hook-form errors object into a flat object that we can iterate over
+ * Reshape the react-hook-form errors object into a flat object that can be iterated over
  * For example it would convert this deeply nested error object
  * {
       "name": { "message": "this is an error" },
@@ -31,49 +31,49 @@ type Error = {
 
   [
     {
-      "fieldName": "name",
+      "path": "name",
       "message": "this is an error"
     },
     {
-      "fieldName": "purchaseOrdersConfig.thresholdType",
+      "path": "purchaseOrdersConfig.thresholdType",
       "message": "This is an error for threshold type"
     },
     {
-      "fieldName": "offices.0.address.formattedAddress",
+      "path": "offices.0.address.formattedAddress",
       "message": "This is an address error"
     },
     {
-      "fieldName": "images.0",
+      "path": "images.0",
       "message": "Image is required"
     }
   ]
  */
 export function flattenErrors(
   errors: FieldErrors,
-  fieldNamePrefix?: string
+  pathPrefix?: string
 ): Error[] {
   const flattenedErrors: Error[] = [];
   // Handle the case where an error is an array of FieldErrors, each errors are
   // handled individually
   if (errors.message && typeof errors.message === "string")
-    return [{ fieldName: fieldNamePrefix || "", message: errors.message }];
+    return [{ path: pathPrefix || "", message: errors.message }];
 
   // Normal errors object
   Object.entries(errors).forEach(([key, error]) => {
-    const fieldName = fieldNamePrefix ? fieldNamePrefix + "." + key : key;
+    const path = pathPrefix ? pathPrefix + "." + key : key;
     // Test for message even if empty
     if (error?.message)
       flattenedErrors.push({
-        fieldName,
+        path,
         message: error?.message as unknown as string,
       });
     else if (Array.isArray(error)) {
       error.forEach((error: FieldErrors, index: number) =>
-        flattenedErrors.push(...flattenErrors(error, fieldName + "." + index))
+        flattenedErrors.push(...flattenErrors(error, path + "." + index))
       );
     } else {
       if (error) {
-        flattenedErrors.push(...flattenErrors(error as FieldErrors, fieldName));
+        flattenedErrors.push(...flattenErrors(error as FieldErrors, path));
       }
     }
   });

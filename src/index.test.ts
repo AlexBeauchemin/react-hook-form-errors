@@ -31,9 +31,9 @@ describe("Forms/Errors", () => {
               // Type casting so typescript doesn't complain
             },
           ] as unknown as FieldError,
-          offices: [
+          addresses: [
             {
-              address: {
+              info: {
                 formattedAddress: {
                   message: "This is an address error",
                   type: "required",
@@ -48,27 +48,27 @@ describe("Forms/Errors", () => {
         const flattenedErrors = flattenErrors(errors);
 
         expect(flattenedErrors[0]).toMatchObject({
-          fieldName: "name",
+          path: "name",
           message: "String must contain at least 1 character(s)",
         });
         expect(flattenedErrors[1]).toMatchObject({
-          fieldName: "address.label",
+          path: "address.label",
           message: "Address label is required",
         });
         expect(flattenedErrors[2]).toMatchObject({
-          fieldName: "images.0",
+          path: "images.0",
           message: "Image is required",
         });
         expect(flattenedErrors[3]).toMatchObject({
-          fieldName: "offices.0.address.formattedAddress",
+          path: "addresses.0.info.formattedAddress",
           message: "This is an address error",
         });
         expect(flattenedErrors[4]).toMatchObject({
-          fieldName: "message",
+          path: "message",
           message: "A message error",
         });
         expect(flattenedErrors[5]).toMatchObject({
-          fieldName: "type",
+          path: "type",
           message: "A type error",
         });
       });
