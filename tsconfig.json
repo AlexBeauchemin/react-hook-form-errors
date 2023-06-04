@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true
+    // "target": "es5",
+    // "module": "esnext",
+    // "lib": ["dom", "esnext"],
+    // "jsx": "react",
+    // "declaration": true,
+    // "outDir": "dist",
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "moduleResolution": "node",
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.js", "src/**/*.test.ts", "src/**/*.test.tsx"]
+}
