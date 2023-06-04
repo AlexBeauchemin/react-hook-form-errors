@@ -1,5 +1,5 @@
 ---
-"react-hook-form-errors": minor
+'react-hook-form-errors': minor
 ---
 
 First release

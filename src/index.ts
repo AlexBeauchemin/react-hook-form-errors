@@ -1,4 +1,4 @@
-import type { FieldErrors } from "react-hook-form";
+import type { FieldErrors } from 'react-hook-form';
 
 type Error = {
   path: string;
@@ -50,19 +50,19 @@ type Error = {
  */
 export function flattenErrors(
   errors: FieldErrors,
-  pathPrefix?: string
+  pathPrefix?: string,
 ): Error[] {
   const flattenedErrors: Error[] = [];
   // This shouldn't happen, but just in case
   if (!errors) return flattenedErrors;
   // Handle the case where an error is an array of FieldErrors, each errors are
   // handled individually
-  if (errors.message && typeof errors.message === "string")
-    return [{ path: pathPrefix || "", message: errors.message }];
+  if (errors.message && typeof errors.message === 'string')
+    return [{ path: pathPrefix || '', message: errors.message }];
 
   // Normal errors object
   Object.entries(errors).forEach(([key, error]) => {
-    const path = pathPrefix ? pathPrefix + "." + key : key;
+    const path = pathPrefix ? pathPrefix + '.' + key : key;
     // Test for message even if empty
     if (error?.message)
       flattenedErrors.push({
@@ -71,7 +71,7 @@ export function flattenErrors(
       });
     else if (Array.isArray(error)) {
       error.forEach((error: FieldErrors, index: number) =>
-        flattenedErrors.push(...flattenErrors(error, path + "." + index))
+        flattenedErrors.push(...flattenErrors(error, path + '.' + index)),
       );
     } else {
       if (error) {
